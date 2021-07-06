@@ -3,8 +3,9 @@ import json
 
 parser = argparse.ArgumentParser(description='Takes country names, add local names into form a JSON title')
 parser.add_argument('--tsv', metavar='FILE', type=str, help='Path to a geonames countryInfo.txt file.')
-parser.add_argument('--localized', metavar='FILE', type=str, nargs='+', help='Path to a geonames countryInfo.txt file.', default=[])
+parser.add_argument('--localized', metavar='FILE', type=str, action='append', help='Path to a geonames countryInfo.txt file.', default=[])
 parser.add_argument('--countries', metavar='COUNTRIES', type=str, help='Comma-separated list of 2-letter country codes. Default: all countries.')
+parser.add_argument('--skip_countries', metavar='COUNTRIES', type=str, help='Comma-separated list of 2-letter country codes to skip.', default='')
 parser.add_argument('--limit', metavar='N', type=int, help='Only use first N matching countries.')
 
 args = parser.parse_args()
@@ -14,6 +15,9 @@ def get_english(args):
     all_countries = (args.countries == None)
     if not all_countries:
         countries = args.countries.split(',')
+
+    skip_countries_with_empty = args.skip_countries.split(',')
+    skip_countries = [c for c in skip_countries_with_empty if c]
 
     limit = args.limit
     countries_dict = {}
@@ -32,6 +36,8 @@ def get_english(args):
 
             if not all_countries:
                 if not country_code in countries: continue
+
+            if country_code in skip_countries: continue
 
             countries_dict[country_code] = {
                 'id': country_id,
@@ -69,11 +75,11 @@ for localized in args.localized:
 
 for country_code in countries_dict:
     country_dict = countries_dict[country_code]
+    json_title = json.dumps(country_dict['title_m'], ensure_ascii=False)
     columns = [
         country_dict['id'],
         country_code,
-        "'" + json.dumps(country_dict['title_m'], ensure_ascii=False) + "'",
-        # This would be better, but PhpStorm cannot import strings with quotations escaped with \"
-        #json.dumps(json.dumps(country_dict['title_m'], ensure_ascii=False), ensure_ascii=False),
+        country_code,
+        "'" + json_title.replace("'", "''") + "'",
     ]
     print('\t'.join(columns))
