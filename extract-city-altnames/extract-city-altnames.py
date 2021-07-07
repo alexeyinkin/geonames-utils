@@ -1,7 +1,7 @@
 import argparse
 import json
 
-parser = argparse.ArgumentParser(description='Converts geonames cities to JSON suitable for Firebase import')
+parser = argparse.ArgumentParser(description='Extracts only cities from alternate names, adds country and population.')
 parser.add_argument('--cities', metavar='FILE', type=str, help='Path to the cities TSV file.')
 parser.add_argument('--altnames', metavar='FILE', type=str, help='Path to the alternate names TSV file.')
 parser.add_argument('--countries', metavar='COUNTRIES', type=str, help='Comma-separated list of 2-letter country codes. Default: all countries.')
@@ -19,6 +19,7 @@ skip_languages = {
     'abbr': 1,
     'link': 1,
     'wkdt': 1,
+    'uncl': 1,
 }
 altnames_column_count = 10
 
@@ -52,7 +53,6 @@ def get_cities(args):
 
 limit = args.limit
 cities = get_cities(args)
-#print(city_ids)
 
 with open(args.altnames) as f:
     for line in f:
@@ -65,6 +65,12 @@ with open(args.altnames) as f:
 
         language = columns[2]
         if language in skip_languages: continue
+
+        is_colloquial = columns[6]
+        if is_colloquial == '1': continue
+
+        is_historic = columns[7]
+        if is_historic == '1': continue
 
         columns += [''] * (altnames_column_count - len(columns))
 
