@@ -13,9 +13,9 @@ optional arguments:
 -  `--countries COUNTRIES` Comma-separated list of 2-letter country codes. Default: all countries.
 -  `--limit N`             Only use first N matching cities.
 
-Example:
+Examples:
 ```bash
-python3 geonames-to-json.py --tsv cities500.txt --countries NZ --limit 3 > new-zealand.tsv
+python3 extract-city-altnames.py --cities=../cities500.txt --altnames=../alternateNamesV2.txt > altnames.tsv
 ```
 
 This script also adds 2 columns:

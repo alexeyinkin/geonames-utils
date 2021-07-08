@@ -15,12 +15,16 @@ skip_languages = {
     'iata': 1,
     'icao': 1,
     'faac': 1,
+    'tcid': 1,
     'fr_1793': 1,
     'abbr': 1,
     'link': 1,
     'wkdt': 1,
     'uncl': 1,
+    'phon': 1,
+    'piny': 1,
 }
+
 altnames_column_count = 10
 
 def get_cities(args):
@@ -66,13 +70,17 @@ with open(args.altnames) as f:
         language = columns[2]
         if language in skip_languages: continue
 
+        columns += [''] * (altnames_column_count - len(columns))
+
+        # Comment this out to see not only preferred.
+        is_preferred = columns[4]
+        if is_preferred != '1': continue
+
         is_colloquial = columns[6]
         if is_colloquial == '1': continue
 
         is_historic = columns[7]
         if is_historic == '1': continue
-
-        columns += [''] * (altnames_column_count - len(columns))
 
         city = cities[geonameid]
         columns.append(city['country'])

@@ -1,3 +1,2 @@
-cities500.txt
-alternateNamesV2.txt
-iso-languagecodes.txt
+*.txt
+*.tsv
