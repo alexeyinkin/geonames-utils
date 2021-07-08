@@ -1,6 +1,53 @@
 import argparse
 import json
 
+class AltName:
+    def __init__(
+        self,
+        *,
+        name_id: int,
+        city_id: int,
+        language: str,
+        name: str,
+        is_preferred: bool
+    ) -> None:
+        self.name_id = name_id
+        self.city_id = city_id
+        self.language = language
+        self.name = name
+        self.is_preferred = is_preferred
+
+class LanguageAltNames:
+    def __init__(self) -> None:
+        self.found_preferred = False
+        self.altnames = []
+
+    def add_name(self, altname: AltName) -> None:
+        if not altname.is_preferred and self.found_preferred:
+            return
+
+        if altname.is_preferred and not self.found_preferred:
+            self.found_preferred = True
+            self.altnames = []
+
+        self.altnames.append(altname)
+
+class CityAltNames:
+    def __init__(self) -> None:
+        self.altnames_by_language = {}
+
+    def add_name(self, altname: AltName) -> None:
+        if not altname.language in self.altnames_by_language:
+            self.altnames_by_language[altname.language] = LanguageAltNames()
+
+        self.altnames_by_language[altname.language].add_name(altname)
+
+class City:
+    def __init__(self, *, country_code: str, population: int) -> None:
+        self.country_code = country_code
+        self.population = population
+        self.names = CityAltNames()
+
 parser = argparse.ArgumentParser(description='Extracts only cities from alternate names, adds country and population.')
 parser.add_argument('--cities', metavar='FILE', type=str, help='Path to the cities TSV file.')
 parser.add_argument('--altnames', metavar='FILE', type=str, help='Path to the alternate names TSV file.')
@@ -21,6 +68,7 @@ skip_languages = {
     'link': 1,
     'wkdt': 1,
     'uncl': 1,
+    'unlc': 1,
     'phon': 1,
     'piny': 1,
 }
@@ -48,10 +96,10 @@ def get_cities(args):
 
             id = columns[0]
             population = columns[14]
-            result[id] = {
-                'country': country,
-                'population': population,
-            };
+            result[id] = City(
+                country_code=country,
+                population=int(columns[14]),
+            );
 
     return result;
 
@@ -72,21 +120,39 @@ with open(args.altnames) as f:
 
         columns += [''] * (altnames_column_count - len(columns))
 
-        # Comment this out to see not only preferred.
-        is_preferred = columns[4]
-        if is_preferred != '1': continue
-
         is_colloquial = columns[6]
         if is_colloquial == '1': continue
 
         is_historic = columns[7]
         if is_historic == '1': continue
 
-        city = cities[geonameid]
-        columns.append(city['country'])
-        columns.append(city['population'])
+        altname = AltName(
+            name_id=int(columns[0]),
+            city_id=int(columns[1]),
+            language=columns[2],
+            name=columns[3],
+            is_preferred=columns[4],
+        )
 
-        print('\t'.join(columns))
+        city = cities[geonameid]
+        city.names.add_name(altname)
 
         if limit != None:
             limit -= 1
+
+for city_id in cities:
+    city = cities[city_id]
+
+    for language in city.names.altnames_by_language:
+        altnames = city.names.altnames_by_language[language]
+
+        for altname in altnames.altnames:
+            columns = [
+                altname.name_id,
+                altname.city_id,
+                language,
+                altname.name,
+                city.country_code,
+                city.population,
+            ]
+            print('\t'.join(str(c) for c in columns))
