@@ -28,6 +28,8 @@ Output:
 The output contains:
 - `title` for city name.
 - `score` for population.
+- `admin1` for level 1 of administrative division.
+- `countryAlpha2` for 2-letter country code.
 
 ## TODO
 - Allow to pick and rename fields.

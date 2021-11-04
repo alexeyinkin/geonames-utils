@@ -27,11 +27,12 @@ with open(args.tsv) as f:
         columns = line.rstrip().split('\t')
 
         if not all_countries:
-            country = columns[8]
-            if not country in countries: continue
+            country_alpha2 = columns[8]
+            if not country_alpha2 in countries: continue
 
         id = columns[0]
         title = columns[1]
+        admin1 = columns[10]
         population = int(columns[14])
 
         if title in skip_cities: continue
@@ -39,6 +40,8 @@ with open(args.tsv) as f:
         dict[id] = {
             'title': title,
             'score': population,
+            'admin1': admin1,
+            'countryAlpha2': country_alpha2,
         }
 
         if limit != None:
