@@ -26,7 +26,10 @@ with open(args.tsv) as f:
         gmt_offset_winter = float(columns[2])
         gmt_offset_summer = float(columns[3])
 
-        dict[timezone] = {
+        escaped_timezone_id = timezone.replace('/', '|')
+
+        dict[escaped_timezone_id] = {
+            'id': timezone,
             'countryAlpha2': country_alpha2,
             'gmtOffsetWinter': gmt_offset_winter,
             'gmtOffsetSummer': gmt_offset_summer,

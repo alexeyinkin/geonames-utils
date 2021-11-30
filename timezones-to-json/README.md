@@ -18,13 +18,15 @@ python3 timezones-to-json.py --tsv timeZones.txt --limit 3 > timezonesGeoNames.j
 
 Output:
 ```json
-{"Africa/Abidjan": {"countryAlpha2": "CI", "gmtOffsetWinter": 0.0, "gmtOffsetSummer": 0.0}, "Africa/Accra": {"countryAlpha2": "GH", "gmtOffsetWinter": 0.0, "gmtOffsetSummer": 0.0}, "Africa/Addis_Ababa": {"countryAlpha2": "ET", "gmtOffsetWinter": 3.0, "gmtOffsetSummer": 3.0}}
+{"Africa|Abidjan": {"id": "Africa/Abidjan", "countryAlpha2": "CI", "gmtOffsetWinter": 0.0, "gmtOffsetSummer": 0.0}, "Africa|Accra": {"id": "Africa/Accra", "countryAlpha2": "GH", "gmtOffsetWinter": 0.0, "gmtOffsetSummer": 0.0}, "Africa|Addis_Ababa": {"id": "Africa/Addis_Ababa", "countryAlpha2": "ET", "gmtOffsetWinter": 3.0, "gmtOffsetSummer": 3.0}}
 ```
 
-The output is mapped by timezone string IDs and contains:
+The output contains:
+- `id` for timezone ID in [tz database](https://en.wikipedia.org/wiki/Tz_database) format.
 - `countryAlpha2` for 2-letter country code.
 - `gmtOffsetWinter`
 - `gmtOffsetSummer`
+Document IDs are timezone IDs with forward slashes (/) replaced with vertical lines (|) for Firestore compatibility.
 
 ## TODO
 - Allow to pick and rename fields.
