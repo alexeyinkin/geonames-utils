@@ -25,9 +25,9 @@ with open(args.tsv) as f:
         if limit == 0: break
 
         columns = line.rstrip().split('\t')
+        country_alpha2 = columns[8]
 
         if not all_countries:
-            country_alpha2 = columns[8]
             if not country_alpha2 in countries: continue
 
         id = columns[0]
