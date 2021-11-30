@@ -17,7 +17,7 @@ optional arguments:
 
 Example:
 ```bash
-python3 geonames-to-json.py --tsv cities500.txt --countries GB --skip_cities 'City of London,West End of London' --limit 3 > gb.json
+python3 geonames-to-json.py --tsv cities15000.txt --countries GB --skip_cities 'City of London,West End of London' --limit 3 > gb.json
 ```
 
 Output:
@@ -30,7 +30,7 @@ The output contains:
 - `score` for population.
 - `admin1` for level 1 of administrative division.
 - `countryAlpha2` for 2-letter country code.
-- `timezone` for timezone name in tz database format.
+- `timezoneId` for timezone ID in tz database format.
 
 ## TODO
 - Allow to pick and rename fields.
