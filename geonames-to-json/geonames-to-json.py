@@ -34,6 +34,7 @@ with open(args.tsv) as f:
         title = columns[1]
         admin1 = columns[10]
         population = int(columns[14])
+        timezone = columns[17]
 
         if title in skip_cities: continue
 
@@ -42,6 +43,7 @@ with open(args.tsv) as f:
             'score': population,
             'admin1': admin1,
             'countryAlpha2': country_alpha2,
+            'timezone': timezone,
         }
 
         if limit != None:

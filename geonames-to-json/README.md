@@ -30,6 +30,7 @@ The output contains:
 - `score` for population.
 - `admin1` for level 1 of administrative division.
 - `countryAlpha2` for 2-letter country code.
+- `timezone` for timezone name in tz database format.
 
 ## TODO
 - Allow to pick and rename fields.
