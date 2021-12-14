@@ -17,7 +17,7 @@ optional arguments:
 
 Example:
 ```bash
-python3 geonames-to-json.py --tsv cities15000.txt --countries GB --skip_cities 'City of London,West End of London' --limit 3 > gb.json
+python3 geonames-to-json.py --tsv cities15000.txt --countries GB,US --skip_cities 'City of London,West End of London,Brooklyn,Manhattan,The Bronx,Queens,Staten Island' --limit 3 > gb.json
 ```
 
 Output:
