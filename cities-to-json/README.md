@@ -1,10 +1,10 @@
-# geonames-to-json
+# cities-to-json
 
 This script picks cities from GeoNames DB files in TSV format and writes JSON output.
 
 Usage:
 ```
-python3 geonames-to-json.py [-h] [--tsv FILE] [--countries COUNTRIES] [--skip_cities CITIES] [--limit N]
+python3 cities-to-json.py [-h] [--tsv FILE] [--countries COUNTRIES] [--skip_cities CITIES] [--limit N]
 ```
 Converts geonames cities to JSON suitable for Firebase import
 
@@ -17,7 +17,7 @@ optional arguments:
 
 Example:
 ```bash
-python3 geonames-to-json.py --tsv cities15000.txt --countries GB,US --skip_cities 'City of London,West End of London,Brooklyn,Manhattan,The Bronx,Queens,Staten Island' --limit 3 > gb.json
+python3 cities-to-json.py --tsv cities15000.txt --countries GB,US --skip_cities 'City of London,West End of London,Brooklyn,Manhattan,The Bronx,Queens,Staten Island' --limit 3 > gb.json
 ```
 
 Output:
